@@ -1,0 +1,31 @@
+<resources>
+    <string name="app_name">Demo Media</string>
+    <string name="media_app_title">Demo Media</string>
+    <string name="media_service_connecting">Connecting to media service...</string>
+    <string name="media_service_connected">Connected to media service</string>
+    <string name="media_service_suspended">Media service connection suspended</string>
+    <string name="media_service_failed">Media service connection failed</string>
+    <string name="browse_loading">Loading songs from media browser service...</string>
+    <string name="browse_loaded_songs">Loaded %1$d songs</string>
+    <string name="browse_load_failed">Could not load songs</string>
+    <string name="browse_songs">Songs</string>
+    <string name="browse_albums">Albums</string>
+    <string name="browse_playlists">Playlists</string>
+    <string name="demo_album_title">Demo Drive Album</string>
+    <string name="demo_album_subtitle">3 sample tracks</string>
+    <string name="demo_playlist_title">Drive Playlist</string>
+    <string name="demo_playlist_subtitle">Starter playlist</string>
+    <string name="no_track_selected">No track selected</string>
+    <string name="now_playing_format">Now playing: %1$s - %2$s</string>
+    <string name="sample_track_title">Sample Drive Track</string>
+    <string name="sample_track_subtitle">Local demo media session</string>
+    <string name="playback_state_none">Playback state: none</string>
+    <string name="playback_state_buffering">Playback state: buffering</string>
+    <string name="playback_state_playing">Playback state: playing</string>
+    <string name="playback_state_paused">Playback state: paused</string>
+    <string name="playback_state_stopped">Playback state: stopped</string>
+    <string name="playback_state_error">Playback state: error</string>
+    <string name="play_button_label">Play</string>
+    <string name="pause_button_label">Pause</string>
+    <string name="stop_button_label">Stop</string>
+</resources>
