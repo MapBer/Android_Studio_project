@@ -2,7 +2,14 @@
     <string name="app_name">Automotive Media Demo</string>
     <string name="play">Play</string>
     <string name="pause">Pause</string>
-    <string name="media_demo_ready">music_1.mp3 is ready</string>
+    <string name="media">Media</string>
+    <string name="navigation">Navigation</string>
+    <string name="media_demo_ready">music.mp3 is ready</string>
+    <string name="media_service_connected">Media service connected</string>
+    <string name="media_service_suspended">Media service suspended</string>
+    <string name="media_service_failed">Media service failed</string>
     <string name="media_playing">Music is playing</string>
     <string name="media_paused">Music is paused</string>
+    <string name="media_button_selected">Media mode selected</string>
+    <string name="navigation_button_selected">Navigation mode selected</string>
 </resources>

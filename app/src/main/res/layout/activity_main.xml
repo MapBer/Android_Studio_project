@@ -18,6 +18,19 @@
         android:layout_marginTop="20dp"
         android:text="@string/pause" />
 
+    <Button
+        android:id="@+id/btnMedia"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:text="@string/media" />
+
+    <Button
+        android:id="@+id/btnNavigation"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/navigation" />
+
     <TextView
         android:id="@+id/infoText"
         android:layout_width="wrap_content"

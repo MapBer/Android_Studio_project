@@ -1,25 +1,54 @@
 package com.map.demo;
 
-import android.content.res.AssetFileDescriptor;
-import android.media.AudioAttributes;
-import android.media.MediaPlayer;
-import android.media.session.MediaSession;
+import android.content.ComponentName;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-
-import java.io.IOException;
+import android.support.v4.media.MediaBrowserCompat;
+import android.support.v4.media.session.MediaControllerCompat;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "AutomotiveMediaDemo";
 
-    private MediaPlayer mediaPlayer;
-    private MediaSession mediaSession;
+    private MediaBrowserCompat mediaBrowser;
+    private MediaControllerCompat mediaController;
     private TextView infoText;
+
+    private final MediaBrowserCompat.ConnectionCallback connectionCallback =
+            new MediaBrowserCompat.ConnectionCallback() {
+                @Override
+                public void onConnected() {
+                    try {
+                        mediaController = new MediaControllerCompat(
+                                MainActivity.this,
+                                mediaBrowser.getSessionToken());
+                        MediaControllerCompat.setMediaController(
+                                MainActivity.this,
+                                mediaController);
+                        infoText.setText(R.string.media_service_connected);
+                        Log.d(TAG, "Media browser connected");
+                    } catch (Exception exception) {
+                        infoText.setText(R.string.media_service_failed);
+                        Log.e(TAG, "Could not create media controller", exception);
+                    }
+                }
+
+                @Override
+                public void onConnectionSuspended() {
+                    infoText.setText(R.string.media_service_suspended);
+                    Log.d(TAG, "Media browser connection suspended");
+                }
+
+                @Override
+                public void onConnectionFailed() {
+                    infoText.setText(R.string.media_service_failed);
+                    Log.d(TAG, "Media browser connection failed");
+                }
+            };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,61 +57,44 @@ public class MainActivity extends AppCompatActivity {
 
         Button playBtn = findViewById(R.id.btnPlay);
         Button pauseBtn = findViewById(R.id.btnPause);
+        Button mediaBtn = findViewById(R.id.btnMedia);
+        Button navigationBtn = findViewById(R.id.btnNavigation);
         infoText = findViewById(R.id.infoText);
 
-        mediaSession = new MediaSession(this, "AutomotiveMediaSession");
-        mediaSession.setActive(true);
-
-        mediaPlayer = createMediaPlayer();
+        mediaBrowser = new MediaBrowserCompat(
+                this,
+                new ComponentName(this, MyMediaBrowserService.class),
+                connectionCallback,
+                null);
+        mediaBrowser.connect();
 
         playBtn.setOnClickListener(view -> {
-            if (!mediaPlayer.isPlaying()) {
-                mediaPlayer.start();
+            if (mediaController != null) {
+                mediaController.getTransportControls().play();
                 infoText.setText(R.string.media_playing);
-                Log.d(TAG, "Playing media");
             }
         });
 
         pauseBtn.setOnClickListener(view -> {
-            if (mediaPlayer.isPlaying()) {
-                mediaPlayer.pause();
+            if (mediaController != null) {
+                mediaController.getTransportControls().pause();
                 infoText.setText(R.string.media_paused);
-                Log.d(TAG, "Paused media");
             }
         });
-    }
 
-    private MediaPlayer createMediaPlayer() {
-        MediaPlayer player = new MediaPlayer();
-        player.setAudioAttributes(
-                new AudioAttributes.Builder()
-                        .setUsage(AudioAttributes.USAGE_MEDIA)
-                        .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
-                        .build());
+        mediaBtn.setOnClickListener(view ->
+                infoText.setText(R.string.media_button_selected));
 
-        try (AssetFileDescriptor descriptor = getResources().openRawResourceFd(R.raw.music_1)) {
-            player.setDataSource(
-                    descriptor.getFileDescriptor(),
-                    descriptor.getStartOffset(),
-                    descriptor.getLength());
-            player.prepare();
-        } catch (IOException exception) {
-            Log.e(TAG, "Could not load raw media file", exception);
-        }
-
-        return player;
+        navigationBtn.setOnClickListener(view ->
+                infoText.setText(R.string.navigation_button_selected));
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (mediaPlayer != null) {
-            mediaPlayer.release();
-            mediaPlayer = null;
-        }
-        if (mediaSession != null) {
-            mediaSession.release();
-            mediaSession = null;
+        if (mediaBrowser != null) {
+            mediaBrowser.disconnect();
+            mediaBrowser = null;
         }
     }
 }
